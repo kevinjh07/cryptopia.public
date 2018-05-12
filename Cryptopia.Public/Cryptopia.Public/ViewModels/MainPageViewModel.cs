@@ -1,19 +1,101 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
+﻿using Cryptopia.Public.Models;
+using Cryptopia.Public.Rest;
+using Prism.Commands;
 using Prism.Navigation;
+using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace Cryptopia.Public.ViewModels
-{
-    public class MainPageViewModel : ViewModelBase
-    {
-        public MainPageViewModel(INavigationService navigationService) 
-            : base (navigationService)
-        {
-            Title = "Main Page";
+namespace Cryptopia.Public.ViewModels {
+    public class MainPageViewModel : ViewModelBase {
+        private readonly IPageDialogService _pageDialogService;
+        private readonly INavigationService _navigationService;
+        private readonly IRestRepository _restRepository;
+        public DelegateCommand RefreshCommand { get; private set; }
+        public DelegateCommand SearchCommand { get; private set; }
+        public DelegateCommand ItemTappedCommand { get; private set; }
+
+        private bool isBusy;
+        public bool IsBusy {
+            get { return isBusy; }
+            set { SetProperty(ref isBusy, value); }
+        }
+
+        private string searchText;
+        public string SearchText {
+            get { return searchText; }
+            set { SetProperty(ref searchText, value); }
+        }
+
+        private Coin selectedCoin;
+        public Coin SelectedCoin {
+            get { return selectedCoin; }
+            set { SetProperty(ref selectedCoin, value); }
+        }
+
+        private ObservableCollection<Coin> coins;
+        public ObservableCollection<Coin> Coins {
+            get { return coins; }
+            set { SetProperty(ref coins, value); }
+        }
+
+        private List<Coin> SourceCoins { get; set; }
+
+        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IRestRepository restRepository)
+            : base(navigationService) {
+            _navigationService = navigationService;
+            _pageDialogService = pageDialogService;
+            _restRepository = restRepository;
+            Coins = new ObservableCollection<Coin>();
+            SourceCoins = new List<Coin>();
+            SearchCommand = new DelegateCommand(Search);
+            ItemTappedCommand = new DelegateCommand(ShowCoinDetails);
+            RefreshCommand = new DelegateCommand(async () => await GetCoins());
+            RefreshCommand.Execute();
+        }
+
+        public override void OnNavigatedFrom(NavigationParameters parameters) {
+            SelectedCoin = null;
+        }
+
+        private async void ShowCoinDetails() {
+            if (SelectedCoin == null) {
+                return;
+            }
+            var parameters = new NavigationParameters();
+            parameters.Add("SelectedCoin", SelectedCoin);
+            await _navigationService.NavigateAsync("CoinDetailPage", parameters);
+        }
+
+        private void Search() {
+            Coins.Clear();
+            if (SearchText != null && SearchText.Trim() != string.Empty) {
+                Coins = new ObservableCollection<Coin>(SourceCoins.Where(c =>
+                    c.Name.Trim().ToLower().Contains(SearchText.ToLower())
+                    || c.Symbol.Trim().ToLower().Contains(SearchText.ToLower())));
+            } else {
+                Coins = new ObservableCollection<Coin>(SourceCoins);
+            }
+        }
+
+        private async Task GetCoins() {
+            IsBusy = true;
+            try {
+                var coins = await _restRepository.GetCoins();
+                Coins.Clear();
+                SourceCoins.Clear();
+                SourceCoins.AddRange(coins);
+                foreach (var coin in coins) {
+                    Coins.Add(coin);
+                }
+            } catch (Exception e) {
+                await _pageDialogService.DisplayAlertAsync("Error", e.Message, "OK");
+            } finally {
+                IsBusy = false;
+            }
         }
     }
 }

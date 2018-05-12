@@ -1,16 +1,14 @@
 ﻿using Prism;
-using Prism.Ioc;
-using Cryptopia.Public.ViewModels;
+using Prism.Unity;
 using Cryptopia.Public.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Prism.Unity;
+using Cryptopia.Public.Rest;
+using Prism.Ioc;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Cryptopia.Public
-{
-    public partial class App : PrismApplication
-    {
+namespace Cryptopia.Public {
+    public partial class App : PrismApplication {
         /* 
          * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
          * This imposes a limitation in which the App class must have a default constructor. 
@@ -20,17 +18,21 @@ namespace Cryptopia.Public
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
 
-        protected override async void OnInitialized()
-        {
+        protected override async void OnInitialized() {
             InitializeComponent();
 
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
         }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
-        {
+        protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
+            containerRegistry.RegisterSingleton<IRestRepository, RestRepository>();
+            containerRegistry.RegisterForNavigation<CoinDetailPage>();
+            containerRegistry.RegisterForNavigation<MarketOrdersPage>();
+            containerRegistry.RegisterForNavigation<BuyOrdersPage>();
+            containerRegistry.RegisterForNavigation<SellOrdersPage>();
+            containerRegistry.RegisterForNavigation<MarketHistoryPage>();
         }
     }
 }

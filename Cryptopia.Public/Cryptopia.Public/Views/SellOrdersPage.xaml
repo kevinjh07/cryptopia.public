@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="Cryptopia.Public.Views.SellOrdersPage"
+             Title="Sell">
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding SellOrders}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" 
+                  IsRefreshing="{Binding IsBusy}" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ContentView>
+                            <Grid Padding="10, 5, 10, 5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Price:" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Volume:" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Total:" Grid.Row="2" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="{Binding Price, StringFormat='{0} BTC'}" Grid.Row="0" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding VolumeFormatted}" Grid.Row="1" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding Total, StringFormat='{0} BTC'}" Grid.Row="2" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                            </Grid>
+                        </ContentView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

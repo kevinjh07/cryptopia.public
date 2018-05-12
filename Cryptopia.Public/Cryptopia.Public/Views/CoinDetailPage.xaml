@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:converter="clr-namespace:Cryptopia.Public.Converters"
+             x:Class="Cryptopia.Public.Views.CoinDetailPage"
+             Title="{Binding Coin.Name}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:CoinChangeToColorConverter x:Key="CoinChangeConverter"/>
+            <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Orders" Command="{Binding MarketOrdersCommand}"/>
+        <ToolbarItem Text="History" Command="{Binding MarketHistoryCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" 
+                         IsVisible="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" >
+                <TableView Intent="Data" HasUnevenRows="True" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <TableRoot>
+                        <TableSection>
+                            <TextCell Text="Change" Detail="{Binding Market.Change, StringFormat='{0} %'}}" 
+                              DetailColor="{Binding Market.Change, Converter={StaticResource CoinChangeConverter}}"/>
+                            <TextCell Text="Ask Price" Detail="{Binding Market.AskPrice, StringFormat='{0} BTC'}"/>
+                            <TextCell Text="Bid Price" Detail="{Binding Market.BidPrice, StringFormat='{0} BTC'}"/>
+                            <TextCell Text="Low" Detail="{Binding Market.Low, StringFormat='{0} BTC'}}"/>
+                            <TextCell Text="High" Detail="{Binding Market.High, StringFormat='{0} BTC'}}"/>
+                            <TextCell Text="Volume" Detail="{Binding Market.Volume}"/>
+                            <TextCell Text="Last Price" Detail="{Binding Market.LastPrice, StringFormat='{0} BTC'}}"/>
+                            <TextCell Text="Buy Volume" Detail="{Binding Market.BuyVolume}"/>
+                            <TextCell Text="Sell Volume" Detail="{Binding Market.SellVolume}"/>
+                            <TextCell Text="Open" Detail="{Binding Market.Open, StringFormat='{0} BTC'}}"/>
+                            <TextCell Text="Close" Detail="{Binding Market.Close, StringFormat='{0} BTC'}}"/>
+                            <TextCell Text="Base Volume" Detail="{Binding Market.BaseVolume}"/>
+                            <TextCell Text="Buy Base Volume" Detail="{Binding Market.BuyBaseVolume}"/>
+                            <TextCell Text="Sell Base Volume" Detail="{Binding Market.SellBaseVolume}"/>
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

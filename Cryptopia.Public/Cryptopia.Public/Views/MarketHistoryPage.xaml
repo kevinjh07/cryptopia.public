@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:converter="clr-namespace:Cryptopia.Public.Converters"
+             x:Class="Cryptopia.Public.Views.MarketHistoryPage"
+             Title="{Binding Coin.Symbol, StringFormat='{0}/BTC History'}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:HistoryTypeToColorConverter x:Key="HistoryTypeConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding MarketHistories}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" 
+                  IsRefreshing="{Binding IsBusy}" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ContentView>
+                            <Grid Padding="10, 5, 10, 5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Type:" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Price:" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Amount:" Grid.Row="2" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Total:" Grid.Row="3" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="Timestamp:" Grid.Row="4" Grid.Column="0" HorizontalOptions="Start"/>
+                                <Label Text="{Binding Type}" TextColor="{Binding Type, Converter={StaticResource HistoryTypeConverter}}" 
+                                       Grid.Row="0" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding Price, StringFormat='{0} BTC'}" Grid.Row="1" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding AmountFormatted}" Grid.Row="2" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding Total, StringFormat='{0} BTC'}" Grid.Row="3" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                                <Label Text="{Binding TimestampDateTime, StringFormat='{0:G}'}" Grid.Row="4" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
+                            </Grid>
+                        </ContentView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
