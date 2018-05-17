@@ -18,12 +18,6 @@ namespace Cryptopia.Public.ViewModels {
         public DelegateCommand SearchCommand { get; private set; }
         public DelegateCommand ItemTappedCommand { get; private set; }
 
-        private bool isBusy;
-        public bool IsBusy {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
-
         private string searchText;
         public string SearchText {
             get { return searchText; }
@@ -44,8 +38,8 @@ namespace Cryptopia.Public.ViewModels {
 
         private List<Coin> SourceCoins { get; set; }
 
-        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IRestRepository restRepository)
-            : base(navigationService) {
+        public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
+            IRestRepository restRepository) : base(navigationService) {
             _navigationService = navigationService;
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
@@ -62,9 +56,6 @@ namespace Cryptopia.Public.ViewModels {
         }
 
         private async void ShowCoinDetails() {
-            if (SelectedCoin == null) {
-                return;
-            }
             var parameters = new NavigationParameters();
             parameters.Add("SelectedCoin", SelectedCoin);
             await _navigationService.NavigateAsync("CoinDetailPage", parameters);
@@ -82,8 +73,8 @@ namespace Cryptopia.Public.ViewModels {
         }
 
         private async Task GetCoins() {
-            IsBusy = true;
             try {
+                IsBusy = true;
                 var coins = await _restRepository.GetCoins();
                 Coins.Clear();
                 SourceCoins.Clear();

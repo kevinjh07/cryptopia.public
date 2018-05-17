@@ -5,7 +5,7 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:converter="clr-namespace:Cryptopia.Public.Converters"
              x:Class="Cryptopia.Public.Views.MarketHistoryPage"
-             Title="{Binding Coin.Symbol, StringFormat='{0}/BTC History'}">
+             Title="{Binding CoinSymbol, StringFormat='{0}/BTC History'}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:HistoryTypeToColorConverter x:Key="HistoryTypeConverter"/>

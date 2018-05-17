@@ -10,15 +10,8 @@ namespace Cryptopia.Public.ViewModels {
         private readonly INavigationService _navigationService;
         private readonly IRestRepository _restRepository;
         private readonly IPageDialogService _pageDialogService;
-        public DelegateCommand NavigateBackCommand { get; private set; }
         public DelegateCommand MarketOrdersCommand { get; private set; }
         public DelegateCommand MarketHistoryCommand { get; private set; }
-
-        private bool isBusy;
-        public bool IsBusy {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
 
         private Coin coin;
         public Coin Coin {
@@ -32,19 +25,17 @@ namespace Cryptopia.Public.ViewModels {
             set { SetProperty(ref market, value); }
         }
 
-        public CoinDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IRestRepository restRepository) : base(navigationService) {
+        public CoinDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
+            IRestRepository restRepository) : base(navigationService) {
             _navigationService = navigationService;
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
-            NavigateBackCommand = new DelegateCommand(async () => await _navigationService.GoBackAsync());
             MarketOrdersCommand = new DelegateCommand(ShowMarketOrdersPage);
             MarketHistoryCommand = new DelegateCommand(ShowMarketHistoryPage);
         }
 
         private async void ShowMarketOrdersPage() {
             var parameters = new NavigationParameters();
-            var marketOrdersData = await _restRepository.GetMarketOrdersData(Coin.Symbol);
-            parameters.Add("MarketOrdersData", marketOrdersData);
             parameters.Add("SelectedCoin", Coin);
             await _navigationService.NavigateAsync("MarketOrdersPage", parameters);
         }
@@ -57,9 +48,6 @@ namespace Cryptopia.Public.ViewModels {
 
         public override void OnNavigatingTo(NavigationParameters parameters) {
             Coin = (Coin)parameters["SelectedCoin"];
-            if (Coin == null) {
-                NavigateBackCommand.Execute();
-            }
             GetMarket();
         }
 

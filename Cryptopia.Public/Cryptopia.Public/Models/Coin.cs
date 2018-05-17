@@ -55,7 +55,7 @@ namespace Cryptopia.Public.Models {
         [JsonProperty("ListingStatus")]
         public string ListingStatus { get; set; }
 
-        public string Image {
+        public string ImageURL {
             get {
                 return string.Format(CryptopiaCoinImagesURL, Symbol);
             }

@@ -49,5 +49,23 @@ namespace Cryptopia.Public.Models {
 
         [JsonProperty("SellBaseVolume")]
         public double SellBaseVolume { get; set; }
+
+        private string CoinSymbol {
+            get {
+                return Label.Substring(0, Label.IndexOf("/"));
+            }
+        }
+
+        public string VolumeCoinSymbol {
+            get {
+                return string.Format("{0} {1}", Volume, CoinSymbol);
+            }
+        }
+
+        public string SellVolumeCoinSymbol {
+            get {
+                return string.Format("{0} {1}", SellVolume, CoinSymbol);
+            }
+        }
     }
 }

@@ -13,19 +13,12 @@ namespace Cryptopia.Public.ViewModels {
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _pageDialogService;
         private readonly IRestRepository _restRepository;
-        public DelegateCommand NavigateBackCommand { get; private set; }
         public DelegateCommand RefreshCommand { get; private set; }
 
         private ObservableCollection<OrdersData> buyOrders;
         public ObservableCollection<OrdersData> BuyOrders {
             get { return buyOrders; }
             set { SetProperty(ref buyOrders, value); }
-        }
-
-        private bool isBusy;
-        public bool IsBusy {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
         }
 
         private Coin coin;
@@ -40,7 +33,6 @@ namespace Cryptopia.Public.ViewModels {
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
             BuyOrders = new ObservableCollection<OrdersData>();
-            NavigateBackCommand = new DelegateCommand(async () => await _navigationService.GoBackAsync());
             RefreshCommand = new DelegateCommand(async () => await GetMarketDataOrders());
         }
 
@@ -59,16 +51,13 @@ namespace Cryptopia.Public.ViewModels {
             }
         }
 
-        public override void OnNavigatingTo(NavigationParameters parameters) {
+        public async override void OnNavigatingTo(NavigationParameters parameters) {
             try {
                 IsBusy = true;
                 Coin = (Coin)parameters["SelectedCoin"];
-                var marketordersData = (MarketOrders)parameters["MarketOrdersData"];
-                if (Coin == null || marketordersData == null) {
-                    NavigateBackCommand.Execute();
-                }
                 BuyOrders.Clear();
-                foreach (var order in marketordersData.BuyOrders) {
+                var marketOrdersData = await _restRepository.GetMarketOrdersData(Coin.Symbol);
+                foreach (var order in marketOrdersData.BuyOrders) {
                     BuyOrders.Add(order);
                 }
             } finally {

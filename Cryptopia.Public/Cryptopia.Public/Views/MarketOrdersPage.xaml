@@ -5,10 +5,9 @@
             prism:ViewModelLocator.AutowireViewModel="True"
             xmlns:local="clr-namespace:Cryptopia.Public.Views"
             x:Class="Cryptopia.Public.Views.MarketOrdersPage"
-            Title="Market Orders">
+            Title="{Binding CoinSymbol, StringFormat='{0}/BTC Orders'}">
     <TabbedPage.Children>
-        <local:BuyOrdersPage/>
         <local:SellOrdersPage/>
+        <local:BuyOrdersPage/>
     </TabbedPage.Children>
 </TabbedPage>
-    

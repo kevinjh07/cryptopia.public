@@ -12,14 +12,7 @@ namespace Cryptopia.Public.ViewModels {
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _pageDialogService;
         private readonly IRestRepository _restRepository;
-        public DelegateCommand NavigateBackCommand { get; private set; }
         public DelegateCommand RefreshCommand { get; private set; }
-
-        private bool isBusy;
-        public bool IsBusy {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
 
         private ObservableCollection<MarketHistory> marketHistories;
         public ObservableCollection<MarketHistory> MarketHistories {
@@ -27,11 +20,7 @@ namespace Cryptopia.Public.ViewModels {
             set { SetProperty(ref marketHistories, value); }
         }
 
-        private Coin coin;
-        public Coin Coin {
-            get { return coin; }
-            set { SetProperty(ref coin, value); }
-        }
+        public string CoinSymbol { get; set; }
 
         public MarketHistoryPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService,
             IRestRepository restRepository) : base(navigationService) {
@@ -39,15 +28,12 @@ namespace Cryptopia.Public.ViewModels {
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
             MarketHistories = new ObservableCollection<MarketHistory>();
-            NavigateBackCommand = new DelegateCommand(async () => await _navigationService.GoBackAsync());
             RefreshCommand = new DelegateCommand(async () => await GetMarketHistory());
         }
 
         public async override void OnNavigatingTo(NavigationParameters parameters) {
-            Coin = (Coin)parameters["SelectedCoin"];
-            if (Coin == null) {
-                NavigateBackCommand.Execute();
-            }
+            var coin = (Coin)parameters["SelectedCoin"];
+            CoinSymbol = coin.Symbol;
             await GetMarketHistory();
         }
 
@@ -55,7 +41,7 @@ namespace Cryptopia.Public.ViewModels {
             try {
                 IsBusy = true;
                 MarketHistories.Clear();
-                var marketHistories = await _restRepository.GetMarketHistory(Coin.Symbol);
+                var marketHistories = await _restRepository.GetMarketHistory(CoinSymbol);
                 foreach (var history in marketHistories) {
                     MarketHistories.Add(history);
                 }
