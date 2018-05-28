@@ -13,8 +13,8 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Orders" Command="{Binding MarketOrdersCommand}"/>
-        <ToolbarItem Text="History" Command="{Binding MarketHistoryCommand}"/>
+        <ToolbarItem Text="Orders" Command="{Binding MarketOrdersCommand}" Order="Secondary"/>
+        <ToolbarItem Text="History" Command="{Binding MarketHistoryCommand}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
