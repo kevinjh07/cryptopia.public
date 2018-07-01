@@ -5,6 +5,9 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Cryptopia.Public.Rest;
 using Prism.Ioc;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Cryptopia.Public {
@@ -22,6 +25,12 @@ namespace Cryptopia.Public {
             InitializeComponent();
 
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
+        }
+
+        protected override void OnStart() {
+            AppCenter.Start("android=5ecb9929-f37f-4a0e-8531-32f205fd07f8;"
+            + "uwp={Your UWP App secret here};"
+            + "ios={Your iOS App secret here}", typeof(Analytics), typeof(Crashes));
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {

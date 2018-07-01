@@ -50,13 +50,5 @@ namespace Cryptopia.Public.Rest {
             }
             return market;
         }
-
-        private async static Task<T> GetData<T>(string url) {
-            string json = null;
-            using (var client = new HttpClient()) {
-                json = await client.GetStringAsync(GetMarketOrdersURL);
-            }
-            return JsonConvert.DeserializeObject<T>(json);
-        }
     }
 }
