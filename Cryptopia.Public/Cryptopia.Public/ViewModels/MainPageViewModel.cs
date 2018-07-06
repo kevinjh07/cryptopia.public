@@ -38,6 +38,8 @@ namespace Cryptopia.Public.ViewModels {
 
         private List<Coin> SourceCoins { get; set; }
 
+        private static readonly int BitcoinId = 1;
+
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
             IRestRepository restRepository) : base(navigationService) {
             _navigationService = navigationService;
@@ -76,6 +78,7 @@ namespace Cryptopia.Public.ViewModels {
             try {
                 IsBusy = true;
                 var coins = await _restRepository.GetCoins();
+                coins.Remove(coins.First(c => BitcoinId.Equals(c.Id)));
                 Coins.Clear();
                 SourceCoins.Clear();
                 SourceCoins.AddRange(coins);
