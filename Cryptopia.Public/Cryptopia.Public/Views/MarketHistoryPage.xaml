@@ -4,6 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:converter="clr-namespace:Cryptopia.Public.Converters"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
              x:Class="Cryptopia.Public.Views.MarketHistoryPage"
              Title="{Binding CoinSymbol, StringFormat='{0}/BTC History'}">
     <ContentPage.Resources>
@@ -14,6 +15,9 @@
     <ContentPage.Content>
         <ListView ItemsSource="{Binding MarketHistories}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" 
                   IsRefreshing="{Binding IsBusy}" HasUnevenRows="True">
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior />
+            </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

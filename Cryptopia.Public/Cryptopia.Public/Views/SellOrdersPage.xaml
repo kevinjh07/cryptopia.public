@@ -2,12 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Cryptopia.Public.Views.SellOrdersPage"
              Title="Sell">
     <ContentPage.Content>
         <ListView ItemsSource="{Binding SellOrders}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" 
                   IsRefreshing="{Binding IsBusy}" HasUnevenRows="True">
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior />
+            </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

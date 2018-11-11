@@ -1,12 +1,13 @@
-﻿
-using Cryptopia.Public.Models;
+﻿using Cryptopia.Public.Models;
 using Cryptopia.Public.Rest;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms.Extended;
+using System.Linq;
 
 namespace Cryptopia.Public.ViewModels {
     public class BuyOrdersPageViewModel : ViewModelBase {
@@ -15,11 +16,13 @@ namespace Cryptopia.Public.ViewModels {
         private readonly IRestRepository _restRepository;
         public DelegateCommand RefreshCommand { get; private set; }
 
-        private ObservableCollection<OrdersData> buyOrders;
-        public ObservableCollection<OrdersData> BuyOrders {
+        private InfiniteScrollCollection<OrdersData> buyOrders;
+        public InfiniteScrollCollection<OrdersData> BuyOrders {
             get { return buyOrders; }
             set { SetProperty(ref buyOrders, value); }
         }
+
+        public List<OrdersData> SourceList { get; set; }
 
         private Coin coin;
         public Coin Coin {
@@ -27,12 +30,21 @@ namespace Cryptopia.Public.ViewModels {
             set { SetProperty(ref coin, value); }
         }
 
+        private const int PageSize = 10;
+
         public BuyOrdersPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IRestRepository restRepository)
             : base(navigationService) {
             _navigationService = navigationService;
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
-            BuyOrders = new ObservableCollection<OrdersData>();
+            SourceList = new List<OrdersData>();
+            BuyOrders = new InfiniteScrollCollection<OrdersData> {
+                OnLoadMore = async () => {
+                    var page = BuyOrders.Count / PageSize;
+                    return await Task.Run(() => LoadBuyOrders(page));
+                },
+                OnCanLoadMore = () => BuyOrders.Count < SourceList.Count
+            };
             RefreshCommand = new DelegateCommand(async () => await GetMarketDataOrders());
         }
 
@@ -40,10 +52,10 @@ namespace Cryptopia.Public.ViewModels {
             try {
                 IsBusy = true;
                 var marketOrders = await _restRepository.GetMarketOrdersData(Coin.Symbol);
+                SourceList.Clear();
                 BuyOrders.Clear();
-                foreach (var order in marketOrders.BuyOrders) {
-                    BuyOrders.Add(order);
-                }
+                SourceList.AddRange(marketOrders.BuyOrders);
+                BuyOrders.AddRange(LoadBuyOrders(0));
             } catch (Exception e) {
                 await _pageDialogService.DisplayAlertAsync("Error", e.Message, "OK");
             } finally {
@@ -55,14 +67,14 @@ namespace Cryptopia.Public.ViewModels {
             try {
                 IsBusy = true;
                 Coin = (Coin)parameters["SelectedCoin"];
-                BuyOrders.Clear();
-                var marketOrdersData = await _restRepository.GetMarketOrdersData(Coin.Symbol);
-                foreach (var order in marketOrdersData.BuyOrders) {
-                    BuyOrders.Add(order);
-                }
+                await GetMarketDataOrders();
             } finally {
                 IsBusy = false;
             }
+        }
+
+        private List<OrdersData> LoadBuyOrders(int pageIndex) {
+            return SourceList.Skip(pageIndex * PageSize).Take(PageSize).ToList();
         }
     }
 }

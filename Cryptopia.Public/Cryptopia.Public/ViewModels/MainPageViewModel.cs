@@ -65,12 +65,11 @@ namespace Cryptopia.Public.ViewModels {
 
         private void Search() {
             Coins.Clear();
-            if (SearchText != null && SearchText.Trim() != string.Empty) {
-                Coins = new ObservableCollection<Coin>(SourceCoins.Where(c =>
-                    c.Name.Trim().ToLower().Contains(SearchText.ToLower())
-                    || c.Symbol.Trim().ToLower().Contains(SearchText.ToLower())));
-            } else {
-                Coins = new ObservableCollection<Coin>(SourceCoins);
+            var items = (SearchText != null && SearchText.Trim() != string.Empty) ? SourceCoins.Where(c =>
+                c.Name.Trim().ToLower().Contains(SearchText.ToLower()) 
+                || c.Symbol.Trim().ToLower().Contains(SearchText.ToLower())) : SourceCoins;
+            foreach (var item in items) {
+                Coins.Add(item);
             }
         }
 
