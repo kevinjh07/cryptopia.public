@@ -56,7 +56,7 @@ namespace Cryptopia.Public.ViewModels {
                 var marketHistories = await _restRepository.GetMarketHistory(CoinSymbol);
                 SourceList.Clear();
                 MarketHistories.Clear();
-                SourceList.AddRange(MarketHistories);
+                SourceList.AddRange(marketHistories);
                 MarketHistories.AddRange(LoadMarketHistory(0));
             } catch (Exception e) {
                 await _pageDialogService.DisplayAlertAsync("Error", e.Message, "OK");
