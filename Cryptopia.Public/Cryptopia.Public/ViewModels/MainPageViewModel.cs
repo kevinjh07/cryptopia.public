@@ -5,9 +5,9 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms.Extended;
 
 namespace Cryptopia.Public.ViewModels {
     public class MainPageViewModel : ViewModelBase {
@@ -30,8 +30,8 @@ namespace Cryptopia.Public.ViewModels {
             set { SetProperty(ref selectedCoin, value); }
         }
 
-        private ObservableCollection<Coin> coins;
-        public ObservableCollection<Coin> Coins {
+        private InfiniteScrollCollection<Coin> coins;
+        public InfiniteScrollCollection<Coin> Coins {
             get { return coins; }
             set { SetProperty(ref coins, value); }
         }
@@ -40,13 +40,21 @@ namespace Cryptopia.Public.ViewModels {
 
         private static readonly int BitcoinId = 1;
 
+        private const int PageSize = 10;
+
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
             IRestRepository restRepository) : base(navigationService) {
             _navigationService = navigationService;
             _pageDialogService = pageDialogService;
             _restRepository = restRepository;
-            Coins = new ObservableCollection<Coin>();
             SourceCoins = new List<Coin>();
+            Coins = new InfiniteScrollCollection<Coin> {
+                OnLoadMore = async () => {
+                    var page = Coins.Count / PageSize;
+                    return (SearchText == null || SearchText == string.Empty) ? await Task.Run(() => LoadCoins(page)) : null;
+                },
+                OnCanLoadMore = () => Coins.Count < SourceCoins.Count
+            };
             SearchCommand = new DelegateCommand(Search);
             ItemTappedCommand = new DelegateCommand(ShowCoinDetails);
             RefreshCommand = new DelegateCommand(async () => await GetCoins());
@@ -65,12 +73,9 @@ namespace Cryptopia.Public.ViewModels {
 
         private void Search() {
             Coins.Clear();
-            var items = (SearchText != null && SearchText.Trim() != string.Empty) ? SourceCoins.Where(c =>
-                c.Name.Trim().ToLower().Contains(SearchText.ToLower()) 
-                || c.Symbol.Trim().ToLower().Contains(SearchText.ToLower())) : SourceCoins;
-            foreach (var item in items) {
-                Coins.Add(item);
-            }
+            Coins.AddRange((SearchText != null && SearchText.Trim() != string.Empty) ? SourceCoins.Where(c =>
+                c.Name.Trim().ToLower().Contains(SearchText.ToLower())
+                || c.Symbol.Trim().ToLower().Contains(SearchText.ToLower())) : LoadCoins(0));
         }
 
         private async Task GetCoins() {
@@ -81,14 +86,19 @@ namespace Cryptopia.Public.ViewModels {
                 Coins.Clear();
                 SourceCoins.Clear();
                 SourceCoins.AddRange(coins);
-                foreach (var coin in coins) {
-                    Coins.Add(coin);
+                Coins.AddRange(LoadCoins(0));
+                if (SearchText != null && SearchText.Trim() != string.Empty) {
+                    Search();
                 }
             } catch (Exception e) {
                 await _pageDialogService.DisplayAlertAsync("Error", e.Message, "OK");
             } finally {
                 IsBusy = false;
             }
+        }
+
+        private List<Coin> LoadCoins(int pageIndex) {
+            return SourceCoins.Skip(pageIndex * PageSize).Take(PageSize).ToList();
         }
     }
 }

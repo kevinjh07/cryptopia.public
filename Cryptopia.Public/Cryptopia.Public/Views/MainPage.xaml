@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
              x:Class="Cryptopia.Public.Views.MainPage"
              Title="Cryptopia API">
     <ContentPage.Content>
@@ -22,6 +23,7 @@
                   IsRefreshing="{Binding IsBusy}" HasUnevenRows="True" SelectedItem="{Binding SelectedCoin, Mode=TwoWay}">
                     <ListView.Behaviors>
                         <b:EventToCommandBehavior EventName="ItemTapped" Command="{Binding ItemTappedCommand}"/>
+                        <extended:InfiniteScrollBehavior />
                     </ListView.Behaviors>
                     <ListView.ItemTemplate>
                         <DataTemplate>
