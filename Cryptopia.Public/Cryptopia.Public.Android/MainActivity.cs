@@ -5,7 +5,7 @@ using Prism;
 using Prism.Ioc;
 
 namespace Cryptopia.Public.Droid {
-    [Activity(Label = "Cryptopia API", Icon = "@mipmap/ic_cryptopia", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Cryptopia Public API", Icon = "@mipmap/ic_cryptopia", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
         protected override void OnCreate(Bundle bundle) {
             TabLayoutResource = Resource.Layout.Tabbar;
