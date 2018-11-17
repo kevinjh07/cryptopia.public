@@ -4,7 +4,7 @@
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
              x:Class="Cryptopia.Public.Views.MainPage"
-             Title="Cryptopia API">
+             Title="Markets for Cryptopia">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
