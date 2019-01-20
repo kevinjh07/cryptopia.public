@@ -2,16 +2,19 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Cryptopia.Public.Models {
-    public class Coin : INotifyPropertyChanged {
+namespace Cryptopia.Public.Models
+{
+    public class Coin : INotifyPropertyChanged
+    {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void RaisePropertyChanged([CallerMemberName]string propertyName = null) {
+        public void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        {
             if (!string.IsNullOrWhiteSpace(propertyName))
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private static readonly string CryptopiaCoinImagesURL = "https://www.cryptopia.co.nz/Content/Images/Coins/{0}-medium.png";
+        private const string CryptopiaCoinImagesURL = "https://www.cryptopia.co.nz/Content/Images/Coins/{0}-medium.png";
 
         [JsonProperty("Id")]
         public int Id { get; set; }
@@ -55,10 +58,6 @@ namespace Cryptopia.Public.Models {
         [JsonProperty("ListingStatus")]
         public string ListingStatus { get; set; }
 
-        public string ImageURL {
-            get {
-                return string.Format(CryptopiaCoinImagesURL, Symbol);
-            }
-        }
+        public string ImageURL => string.Format(CryptopiaCoinImagesURL, Symbol);
     }
 }

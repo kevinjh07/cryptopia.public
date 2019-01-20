@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Cryptopia.Public.Models {
-    public class MarketHistory {
+namespace Cryptopia.Public.Models
+{
+    public class MarketHistory
+    {
         [JsonProperty("TradePairId")]
         public int TradePairId { get; set; }
 
@@ -24,16 +26,8 @@ namespace Cryptopia.Public.Models {
         [JsonProperty("Timestamp")]
         public int Timestamp { get; set; }
 
-        public string AmountFormatted {
-            get {
-                return string.Format("{0} {1}", Amount, Label.Substring(0, Label.IndexOf("/")));
-            }
-        }
+        public string AmountFormatted => string.Format("{0} {1}", Amount, Label.Substring(0, Label.IndexOf("/")));
 
-        public DateTime TimestampDateTime {
-            get {
-                return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Timestamp).ToLocalTime();
-            }
-        }
+        public DateTime TimestampDateTime => new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Timestamp).ToLocalTime();
     }
 }

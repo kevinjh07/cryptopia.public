@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Cryptopia.Public.Models {
-    public class MarketOrders {
+namespace Cryptopia.Public.Models
+{
+    public class MarketOrders
+    {
         [JsonProperty("Buy")]
         public List<OrdersData> BuyOrders { get; set; }
 

@@ -1,39 +1,46 @@
 ﻿using Prism.Mvvm;
 using Prism.Navigation;
 
-namespace Cryptopia.Public.ViewModels {
-    public class ViewModelBase : BindableBase, INavigationAware, IDestructible {
+namespace Cryptopia.Public.ViewModels
+{
+    public class ViewModelBase : BindableBase, INavigationAware, IDestructible
+    {
         protected INavigationService NavigationService { get; private set; }
 
-        private string _title;
+        private string title;
         public string Title {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            get { return title; }
+            set { SetProperty(ref title, value); }
         }
 
-        private bool _isBusy;
+        private bool isBusy;
         public bool IsBusy {
-            get { return _isBusy; }
-            set { SetProperty(ref _isBusy, value); }
+            get { return isBusy; }
+            set { SetProperty(ref isBusy, value); }
         }
 
-        public ViewModelBase(INavigationService navigationService) {
+        public ViewModelBase(INavigationService navigationService)
+        {
             NavigationService = navigationService;
         }
 
-        public virtual void OnNavigatedFrom(NavigationParameters parameters) {
+        public virtual void OnNavigatedFrom(NavigationParameters parameters)
+        {
 
         }
 
-        public virtual void OnNavigatedTo(NavigationParameters parameters) {
+        public virtual void OnNavigatedTo(NavigationParameters parameters)
+        {
 
         }
 
-        public virtual void OnNavigatingTo(NavigationParameters parameters) {
+        public virtual void OnNavigatingTo(NavigationParameters parameters)
+        {
 
         }
 
-        public virtual void Destroy() {
+        public virtual void Destroy()
+        {
 
         }
     }

@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Cryptopia.Public.Models {
-    public class Market {
+namespace Cryptopia.Public.Models
+{
+    public class Market
+    {
         [JsonProperty("TradePairId")]
         public int TradePairId { get; set; }
 

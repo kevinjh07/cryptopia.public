@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Cryptopia.Public.Models {
-    public class OrdersData {
+namespace Cryptopia.Public.Models
+{
+    public class OrdersData
+    {
         [JsonProperty("TradePairId")]
         public int TradePairId { get; set; }
 
@@ -17,10 +19,6 @@ namespace Cryptopia.Public.Models {
         [JsonProperty("Total")]
         public double Total { get; set; }
 
-        public string VolumeFormatted {
-            get {
-                return string.Format("{0} {1}", Volume, Label.Substring(0, Label.IndexOf("/")));
-            }
-        }
+        public string VolumeFormatted => string.Format("{0} {1}", Volume, Label.Substring(0, Label.IndexOf("/")));
     }
 }

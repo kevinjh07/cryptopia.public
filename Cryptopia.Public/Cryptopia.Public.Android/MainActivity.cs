@@ -4,10 +4,13 @@ using Android.OS;
 using Prism;
 using Prism.Ioc;
 
-namespace Cryptopia.Public.Droid {
+namespace Cryptopia.Public.Droid
+{
     [Activity(Label = "Markets for Cryptopia", Icon = "@mipmap/ic_cryptopia", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
-        protected override void OnCreate(Bundle bundle) {
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    {
+        protected override void OnCreate(Bundle bundle)
+        {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -18,8 +21,10 @@ namespace Cryptopia.Public.Droid {
         }
     }
 
-    public class AndroidInitializer : IPlatformInitializer {
-        public void RegisterTypes(IContainerRegistry container) {
+    public class AndroidInitializer : IPlatformInitializer
+    {
+        public void RegisterTypes(IContainerRegistry container)
+        {
             // Register any platform specific implementations
         }
     }

@@ -4,10 +4,14 @@ using System;
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace Cryptopia.Public.Converters {
-    public class HistoryTypeToColorConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            switch ((HistoryType)value) {
+namespace Cryptopia.Public.Converters
+{
+    public class HistoryTypeToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch ((HistoryType)value)
+            {
                 case HistoryType.Buy:
                     return Color.Green;
                 case HistoryType.Sell:
@@ -17,7 +21,8 @@ namespace Cryptopia.Public.Converters {
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
         }
     }

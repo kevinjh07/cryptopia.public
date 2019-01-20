@@ -10,8 +10,10 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Cryptopia.Public {
-    public partial class App : PrismApplication {
+namespace Cryptopia.Public
+{
+    public partial class App : PrismApplication
+    {
         /* 
          * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
          * This imposes a limitation in which the App class must have a default constructor. 
@@ -21,19 +23,22 @@ namespace Cryptopia.Public {
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
 
-        protected override async void OnInitialized() {
+        protected override async void OnInitialized()
+        {
             InitializeComponent();
 
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
         }
 
-        protected override void OnStart() {
+        protected override void OnStart()
+        {
             AppCenter.Start("android=5ecb9929-f37f-4a0e-8531-32f205fd07f8;"
             + "uwp={Your UWP App secret here};"
             + "ios={Your iOS App secret here}", typeof(Analytics), typeof(Crashes));
         }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterSingleton<IRestRepository, RestRepository>();

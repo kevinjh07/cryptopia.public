@@ -1,5 +1,7 @@
-﻿namespace Cryptopia.Public.Models {
-    public enum HistoryType {
+﻿namespace Cryptopia.Public.Models
+{
+    public enum HistoryType
+    {
         Buy,
         Sell
     }

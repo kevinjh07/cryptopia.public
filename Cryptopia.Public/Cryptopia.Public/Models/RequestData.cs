@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Cryptopia.Public.Models {
-    public class RequestData {
+namespace Cryptopia.Public.Models
+{
+    public class RequestData
+    {
         [JsonProperty("Success")]
         public string Success { get; set; }
 

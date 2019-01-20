@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0" package="com.kevin.crypto.api" android:installLocation="preferExternal" android:versionCode="2">
-	<uses-sdk android:targetSdkVersion="26" android:minSdkVersion="16" />
+	<uses-sdk android:targetSdkVersion="27" android:minSdkVersion="16" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<application android:icon="@mipmap/ic_cryptopia" android:label="Markets for Cryptopia"></application>
 </manifest>

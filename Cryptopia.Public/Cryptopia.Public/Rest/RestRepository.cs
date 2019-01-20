@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Cryptopia.Public.Rest {
-    public class RestRepository : IRestRepository {
-        private static readonly string GetCurrenciesURL = "https://www.cryptopia.co.nz/api/GetCurrencies";
-        private static readonly string GetMarketOrdersURL = "https://www.cryptopia.co.nz/api/GetMarketOrders/{0}_BTC";
-        private static readonly string GetMarketHistoryURL = "https://www.cryptopia.co.nz/api/GetMarketHistory/{0}_BTC";
-        private static readonly string GetMarketURL = "https://www.cryptopia.co.nz/api/GetMarket/{0}_BTC";
+namespace Cryptopia.Public.Rest
+{
+    public class RestRepository : IRestRepository
+    {
+        private const string GetCurrenciesURL = "https://www.cryptopia.co.nz/api/GetCurrencies";
+        private const string GetMarketOrdersURL = "https://www.cryptopia.co.nz/api/GetMarketOrders/{0}_BTC";
+        private const string GetMarketHistoryURL = "https://www.cryptopia.co.nz/api/GetMarketHistory/{0}_BTC";
+        private const string GetMarketURL = "https://www.cryptopia.co.nz/api/GetMarket/{0}_BTC";
 
-        public async Task<List<Coin>> GetCoins() {
+        public async Task<List<Coin>> GetCoins()
+        {
             List<Coin> coins = null;
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient())
+            {
                 var json = await client.GetStringAsync(GetCurrenciesURL);
                 var requestData = JsonConvert.DeserializeObject<RequestDataCurrencies>(json);
                 coins = requestData.Data;
@@ -21,9 +25,11 @@ namespace Cryptopia.Public.Rest {
             return coins;
         }
 
-        public async Task<MarketOrders> GetMarketOrdersData(string coinSymbol) {
+        public async Task<MarketOrders> GetMarketOrdersData(string coinSymbol)
+        {
             MarketOrders marketData = null;
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient())
+            {
                 var json = await client.GetStringAsync(string.Format(GetMarketOrdersURL, coinSymbol));
                 var requestData = JsonConvert.DeserializeObject<RequestDataMarketOrders>(json);
                 marketData = requestData.MarketOrdersData;
@@ -31,9 +37,11 @@ namespace Cryptopia.Public.Rest {
             return marketData;
         }
 
-        public async Task<List<MarketHistory>> GetMarketHistory(string coinSymbol) {
+        public async Task<List<MarketHistory>> GetMarketHistory(string coinSymbol)
+        {
             List<MarketHistory> marketHistory = null;
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient())
+            {
                 var json = await client.GetStringAsync(string.Format(GetMarketHistoryURL, coinSymbol));
                 var requestData = JsonConvert.DeserializeObject<RequestDataMarketHistory>(json);
                 marketHistory = requestData.MarketHistory;
@@ -41,9 +49,11 @@ namespace Cryptopia.Public.Rest {
             return marketHistory;
         }
 
-        public async Task<Market> GetMarket(string coinSymbol) {
+        public async Task<Market> GetMarket(string coinSymbol)
+        {
             Market market = null;
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient())
+            {
                 var json = await client.GetStringAsync(string.Format(GetMarketURL, coinSymbol));
                 var requestData = JsonConvert.DeserializeObject<RequestDataMarket>(json);
                 market = requestData.Data;
